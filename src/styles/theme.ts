@@ -26,7 +26,7 @@ export const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: "gray.900",
+        bg: "#2C2C2C",
         color: "gray.50",
       },
     },
@@ -38,7 +38,6 @@ export const theme = extendTheme({
           container: {
             _focusWithin: {
               label: {
-                backgroundColor: "gray.800",
                 ...activeLabelStyles,
               },
             },
@@ -51,7 +50,6 @@ export const theme = extendTheme({
               left: 0,
               zIndex: 2,
               position: "absolute",
-              backgroundColor: "gray.900",
               pointerEvents: "none",
               mx: 3,
               px: 1,
