@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 
-export function LoginSidebar() {
+export function MainSidebar() {
   return (
     <Flex
       h="100%"

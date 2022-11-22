@@ -1,9 +1,9 @@
 import { Flex, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
-import { Logo } from "../assets/Logo";
-import { LoginForm } from "../components/Login/LoginForm";
-import { MainSidebar } from "../components/MainSidebar";
+import { Logo } from "../../assets/Logo";
+import { MainSidebar } from "../../components/MainSidebar";
+import { RegisterForm } from "../../components/Register/NutritionistRegisterForm";
 
-export default function Home() {
+export default function Register() {
   const isTabletVersion = useBreakpointValue({ base: false, md: true });
 
   return (
@@ -18,26 +18,26 @@ export default function Home() {
       <Flex flex="1" justifyContent="center" overflowY="auto" m="10px 0">
         <Flex
           w={["300px", "330px", "430px"]}
-          minH="700px"
-          maxH="750px"
+          minH="750px"
+          maxH="900px"
           flexDir="column"
         >
           <Flex w="100%" h="180px" justifyContent="center">
             <Logo />
           </Flex>
 
-          {/* login form session */}
+          {/* register form session */}
           <Flex w="100%" h="100%" gap={2} flexDir="column">
             <Text fontSize={["1.8rem", "1.8rem", "2rem"]} fontWeight="500">
-              Iniciar sesión
+              Registrarse
             </Text>
 
             <Text fontSize={["0.8rem", "0.8rem", "1rem"]}>
               ¡Bienvenido! Por favor ingresa tus datos.
             </Text>
 
-            {/* Login form */}
-            <LoginForm />
+            {/* Register form */}
+            <RegisterForm />
           </Flex>
         </Flex>
       </Flex>

@@ -6,6 +6,7 @@ import { useToasts } from "../../hooks/useToasts";
 import { Button } from "../Form/Button";
 import { Input } from "../Form/Input";
 import { InputShowPassword } from "../Form/InputShowPassword";
+import { CheckInButton } from "./CheckInButton";
 
 type SignInData = {
   email: string;
@@ -54,7 +55,6 @@ export function LoginForm() {
       flexDir="column"
       h="100%"
       w="100%"
-      justify="center"
       onSubmit={handleSubmit(onSubmit)}
       gap={4}
       mb={!errors.email || !errors.password ? "0" : 4}
@@ -84,6 +84,8 @@ export function LoginForm() {
         color="#000000"
         isLoading={isSubmitting}
       />
+
+      <CheckInButton />
     </Flex>
   );
 }

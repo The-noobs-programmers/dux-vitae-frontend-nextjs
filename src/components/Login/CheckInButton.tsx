@@ -1,7 +1,16 @@
 import { Divider, Flex, Text } from "@chakra-ui/react";
+import Router from "next/router";
 import { Button } from "../Form/Button";
 
 export function CheckInButton() {
+  function onClientRegisterPage() {
+    Router.push("/client/register");
+  }
+
+  function onNutritionistRegisterPage() {
+    Router.push("/nutritionist/register");
+  }
+
   return (
     <Flex
       w="100%"
@@ -10,7 +19,12 @@ export function CheckInButton() {
       justifyContent="flex-start"
       gap={4}
     >
-      <Button type="button" name="Registrarse" bg="transparent" />
+      <Button
+        type="button"
+        name="Registrarse"
+        bg="transparent"
+        onClick={onClientRegisterPage}
+      />
 
       <Flex align="center">
         <Divider orientation="horizontal" color="#E0E0E0" />
@@ -24,6 +38,7 @@ export function CheckInButton() {
         type="button"
         name="Registrarse como nutricionista"
         bg="transparent"
+        onClick={onNutritionistRegisterPage}
       />
     </Flex>
   );
