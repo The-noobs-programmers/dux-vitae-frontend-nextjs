@@ -12,7 +12,7 @@ export function MainSidebar() {
       bgColor="#000000"
     >
       <Flex flex="1" justifyContent="center">
-        <Flex w={["300px", "330px", "430px"]} flexDir="column" mt="100px">
+        <Flex w={["300px", "330px", "430px"]} flexDir="column" mt="150px">
           <Text fontSize={["2rem", "2rem", "2.2rem"]} fontWeight="700">
             Porque tu salud es lo primero.
           </Text>
