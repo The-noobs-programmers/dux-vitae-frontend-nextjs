@@ -4,11 +4,11 @@ import { Button } from "../Form/Button";
 
 export function CheckInButton() {
   function onClientRegisterPage() {
-    Router.push("/client/register");
+    Router.push("/register/client");
   }
 
   function onNutritionistRegisterPage() {
-    Router.push("/nutritionist/register");
+    Router.push("/register/nutritionist");
   }
 
   return (
