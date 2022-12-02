@@ -12,9 +12,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>
       <ToastProvider>
         <Flex h="100vh" w="100vw">
-          {router.pathname === "/client/list" ? <SidebarClient /> : null}
-          {router.pathname === "/client/profile" ? <SidebarClient /> : null}
-          {router.pathname === "/admin/client" ? <SidebarClient /> : null}
+          {router.asPath.startsWith("/admin") ? <SidebarClient /> : null}
+          {router.asPath.startsWith("/client") ? <SidebarClient /> : null}
+          {router.asPath.startsWith("/nutritionist") ? <SidebarClient /> : null}
           <Component {...pageProps} />
         </Flex>
       </ToastProvider>
