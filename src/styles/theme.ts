@@ -55,6 +55,7 @@ export const theme = extendTheme({
               px: 1,
               my: 2,
               transformOrigin: "left top",
+              color: "#a2a2a2",
             },
           },
         },

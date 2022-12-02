@@ -1,5 +1,5 @@
 import { Flex, Text, useBreakpointValue } from "@chakra-ui/react";
-import { RiHome4Line, RiUserHeartFill } from "react-icons/ri";
+import { RiFileList2Line, RiUserHeartFill } from "react-icons/ri";
 import { Logo } from "../../assets/Logo";
 import { ActiveLink } from "../ActiveLink";
 
@@ -29,7 +29,7 @@ export function SidebarClient() {
           align="center"
           gap={2}
         >
-          <RiHome4Line size="25px" />
+          <RiFileList2Line size="25px" />
 
           {isWebVersion && <Text fontSize="xl">Lista</Text>}
         </Flex>
