@@ -33,7 +33,7 @@ const TextareaBase: ForwardRefRenderFunction<
       id={idName}
       name={idName}
       size="lg"
-      color={color}
+      color="#dadada"
       ref={ref}
       {...rest}
     />

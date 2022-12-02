@@ -92,142 +92,162 @@ export default function ClientProfile({ clientData }: ClientProfileProps) {
   };
 
   return (
-    <Flex
-      flex="1"
-      w={[
-        "calc(100vw - 50px)",
-        "calc(100vw - 50px)",
-        "calc(100vw - 50px)",
-        "calc(100vw - 250px)",
-      ]}
-      mt="45px"
-      flexDir="row"
-    >
-      {/* Form */}
-      <Flex
-        as="form"
-        gap={5}
-        padding="0 15px"
-        flexDir={"column"}
-        flex="1"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        {/* Información general */}
-        <Flex align={"end"}>
-          <Text fontSize={"1.1rem"} fontWeight={"bold"}>
-            Información general
-          </Text>
-        </Flex>
-        {/* Input información general */}
-        <Flex gap={5} flexDir={"column"}>
-          <SimpleGrid columns={2} justifyItems="center" gap={5} marginTop={4}>
-            <Input
-              type={"text"}
-              idName="name"
-              label="Nombre"
-              defaultValue={clientData?.name}
-              error={errors.name}
-              {...register("name")}
-            />
-            <Input
-              type={"text"}
-              idName="lastName"
-              label="Apellido"
-              defaultValue={clientData?.lastName}
-              error={errors.lastName}
-              {...register("lastName")}
-            />
-
-            <Input
-              type={"date"}
-              idName="birthday"
-              label="Fecha de nacimiento"
-              defaultValue={clientData?.birthday ? clientData.birthday : ""}
-              error={errors.birthday}
-              {...register("birthday")}
-            />
-
-            <Select
-              idName="gender"
-              label="Género"
-              placeholder={
-                !!clientData.gender ? clientData.gender : "Seleccione un género"
-              }
-              error={errors.gender}
-              {...register("gender")}
+    <Flex flex="1" align="top" justify="center">
+      <Flex w="80%" mt="45px" flexDir="row">
+        {/* Form */}
+        <Flex
+          as="form"
+          gap={5}
+          padding="0 15px"
+          flexDir={"column"}
+          flex="1"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {/* Información general */}
+          <Flex align={"end"}>
+            <Text fontSize={"1.1rem"} fontWeight={"bold"}>
+              Información general
+            </Text>
+          </Flex>
+          {/* Input información general */}
+          <Flex gap={5} flexDir={"column"}>
+            <SimpleGrid
+              columns={2}
+              justifyItems="center"
+              gap={10}
+              marginTop={4}
             >
-              {clientData.gender && (
-                <option value={clientData?.gender}>{clientData?.gender}</option>
-              )}
-              <option value="Masculino">Masculino</option>
-              <option value="Femenina">Femenina</option>
-              <option value="Otro">Otro</option>
-            </Select>
+              <Input
+                type={"text"}
+                idName="name"
+                label="Nombre"
+                defaultValue={clientData?.name}
+                error={errors.name}
+                {...register("name")}
+              />
+              <Input
+                type={"text"}
+                idName="lastName"
+                label="Apellido"
+                defaultValue={clientData?.lastName}
+                error={errors.lastName}
+                {...register("lastName")}
+              />
 
-            <Input
-              type={"text"}
-              idName="phone"
-              label="Teléfono"
-              defaultValue={clientData?.phone ? clientData.phone : ""}
-              error={errors.phone}
-              {...register("phone")}
+              <Input
+                type={"date"}
+                idName="birthday"
+                label="Fecha de nacimiento"
+                defaultValue={clientData?.birthday ? clientData.birthday : ""}
+                error={errors.birthday}
+                {...register("birthday")}
+              />
+
+              <Select
+                idName="gender"
+                label="Género"
+                error={errors.gender}
+                {...register("gender")}
+              >
+                {!!clientData.gender && (
+                  <option
+                    value={clientData?.gender}
+                    style={{ background: "#383838" }}
+                  >
+                    {clientData?.gender}
+                  </option>
+                )}
+
+                {clientData.gender !== "Masculino" && (
+                  <option value="Masculino" style={{ background: "#383838" }}>
+                    Masculino
+                  </option>
+                )}
+
+                {clientData.gender !== "Femenino" && (
+                  <option value="Femenina" style={{ background: "#383838" }}>
+                    Femenina
+                  </option>
+                )}
+
+                {clientData.gender !== "Otro" && (
+                  <option value="Otro" style={{ background: "#383838" }}>
+                    Otro
+                  </option>
+                )}
+              </Select>
+
+              <Input
+                type={"text"}
+                idName="phone"
+                label="Teléfono"
+                defaultValue={clientData?.phone ? clientData.phone : ""}
+                error={errors.phone}
+                {...register("phone")}
+              />
+            </SimpleGrid>
+
+            <Textarea
+              idName="description"
+              label="Descripción"
+              defaultValue={
+                clientData?.description ? clientData?.description : ""
+              }
+              error={errors.description}
+              {...register("description")}
             />
-          </SimpleGrid>
+          </Flex>
 
-          <Textarea
-            idName="description"
-            label="Descripción"
-            defaultValue={
-              clientData?.description ? clientData?.description : ""
-            }
-            error={errors.description}
-            {...register("description")}
+          <Button
+            type="submit"
+            name="Salvar"
+            isLoading={isSubmitting}
+            borderColor="#02d102"
+            bg="#2ea043"
           />
         </Flex>
 
-        <Button type="submit" name="Salvar" isLoading={isSubmitting} />
-      </Flex>
-
-      {/* profile */}
-      <Flex
-        align={"top"}
-        justifyContent={"center"}
-        pl={2}
-        pr={2}
-        w={"25rem"}
-        flex="1"
-      >
+        {/* profile */}
         <Flex
-          marginTop={20}
-          align={"center"}
-          flexDir={"column"}
-          w={"80%"}
-          h={"60%"}
-          borderRadius={"5px"}
-          gap={8}
+          align={"top"}
+          justifyContent={"center"}
+          pl={2}
+          pr={2}
+          w={"25rem"}
+          flex="1"
         >
-          <Avatar top={-12} w={"6rem"} h={"6rem"} name={nameClient} />
+          <Flex
+            marginTop={20}
+            align={"center"}
+            flexDir={"column"}
+            w={"80%"}
+            h={"60%"}
+            borderRadius={"5px"}
+            gap={8}
+          >
+            <Avatar top={-12} w={"6rem"} h={"6rem"} name={nameClient} />
 
-          <Text fontSize={"1.2rem"} fontWeight={"medium"}>
-            {nameClient}
-          </Text>
+            <Text fontSize={"1.2rem"} fontWeight={"medium"}>
+              {nameClient}
+            </Text>
 
-          <Text fontSize="0.9rem">
-            {clientData?.description
-              ? clientData?.description
-              : "Descripción personal"}
-          </Text>
+            <Text fontSize="0.9rem">
+              {clientData?.description
+                ? clientData?.description
+                : "Descripción personal"}
+            </Text>
 
-          <Text as="i">
-            <q>Nunca es tarde para cambiar tu estilo de vida.</q>
-          </Text>
+            <Text as="i">
+              <q>Nunca es tarde para cambiar tu estilo de vida.</q>
+            </Text>
 
-          <Flex alignItems="center" justifyContent="center" gap="5px">
-            <RiMailLine />
-            <Text fontSize="0.9rem">{clientData?.email}</Text>
+            <Flex alignItems="center" justifyContent="center" gap="5px">
+              <RiMailLine />
+              <Text fontSize="0.9rem">{clientData?.email}</Text>
+            </Flex>
+
+            <Text fontSize="0.7rem">Cuenta creada el {dateCreatedClient}</Text>
           </Flex>
-
-          <Text fontSize="0.7rem">Cuenta creada el {dateCreatedClient}</Text>
         </Flex>
       </Flex>
     </Flex>

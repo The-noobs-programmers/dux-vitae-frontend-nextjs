@@ -70,17 +70,7 @@ export default function NutritionistList({
   }, []);
 
   return (
-    <Flex
-      flex="1"
-      w={[
-        "calc(100vw - 50px)",
-        "calc(100vw - 50px)",
-        "calc(100vw - 50px)",
-        "calc(100vw - 250px)",
-      ]}
-      align="top"
-      justify="center"
-    >
+    <Flex flex="1" align="top" justify="center">
       <TableContainer w="80%" mt="45px">
         <Text mb="8px">Nutricionista:</Text>
         <Input

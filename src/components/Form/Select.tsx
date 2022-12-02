@@ -32,8 +32,9 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> = (
       borderColor="gray.500"
       id={idName}
       name={idName}
-      size="lg"
-      color={color}
+      size="sm"
+      color="#dadada"
+      bg="whiteAlpha.100"
       ref={ref}
       {...rest}
     ></SelectChakra>

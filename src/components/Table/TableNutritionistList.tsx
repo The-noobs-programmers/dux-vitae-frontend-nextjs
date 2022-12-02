@@ -181,7 +181,7 @@ export function TableNutritionistList({
 
             <ModalFooter>
               <Button
-                bg="#cd0000"
+                bg="#a70606"
                 name="Cerrar"
                 border={"none"}
                 onClick={onClose}
@@ -223,18 +223,13 @@ export function TableNutritionistList({
             </ModalBody>
 
             <ModalFooter gap={3}>
-              <Button
-                name="cerrar"
-                border="none"
-                onClick={onClose}
-                bg="#cd0000"
-              />
+              <Button name="cancelar" onClick={onClose} bg="transparent" />
               <Button
                 type="submit"
                 form="appointmentForm"
                 name="enviar"
                 borderColor="#02d102"
-                bg="#00af00"
+                bg="#2ea043"
               />
             </ModalFooter>
           </ModalContent>
