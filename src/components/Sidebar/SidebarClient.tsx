@@ -1,5 +1,11 @@
 import { Flex, Text, useBreakpointValue } from "@chakra-ui/react";
-import { RiFileList2Line, RiUserHeartFill } from "react-icons/ri";
+import {
+  RiFileChartLine,
+  RiFileList2Line,
+  RiSendPlaneLine,
+  RiUserFollowFill,
+  RiUserHeartFill,
+} from "react-icons/ri";
 import { Logo } from "../../assets/Logo";
 import { ActiveLink } from "../ActiveLink";
 import CanSee from "../CanSee";
@@ -56,24 +62,6 @@ export function SidebarClient() {
       </CanSee>
 
       <CanSee roles="admin" role="admin">
-        <ActiveLink href="/admin/client">
-          <Flex
-            p={2}
-            cursor="pointer"
-            transition="0.2s filter"
-            bg="gray.800"
-            _hover={{ filter: "brightness(120%)" }}
-            align="center"
-            gap={2}
-          >
-            <RiFileList2Line size="25px" />
-
-            {isWebVersion && <Text fontSize="xl">Clientes</Text>}
-          </Flex>
-        </ActiveLink>
-      </CanSee>
-
-      <CanSee roles="admin" role="admin">
         <ActiveLink href="/admin/dashboard">
           <Flex
             p={2}
@@ -84,9 +72,27 @@ export function SidebarClient() {
             align="center"
             gap={2}
           >
-            <RiFileList2Line size="25px" />
+            <RiFileChartLine size="25px" />
 
             {isWebVersion && <Text fontSize="xl">Dashboard</Text>}
+          </Flex>
+        </ActiveLink>
+      </CanSee>
+
+      <CanSee roles="admin" role="admin">
+        <ActiveLink href="/admin/client">
+          <Flex
+            p={2}
+            cursor="pointer"
+            transition="0.2s filter"
+            bg="gray.800"
+            _hover={{ filter: "brightness(120%)" }}
+            align="center"
+            gap={2}
+          >
+            <RiUserFollowFill size="25px" />
+
+            {isWebVersion && <Text fontSize="xl">Clientes</Text>}
           </Flex>
         </ActiveLink>
       </CanSee>
@@ -102,9 +108,9 @@ export function SidebarClient() {
             align="center"
             gap={2}
           >
-            <RiFileList2Line size="25px" />
+            <RiSendPlaneLine size="25px" />
 
-            {isWebVersion && <Text fontSize="xl">Citas</Text>}
+            {isWebVersion && <Text fontSize="xl">Solicitud</Text>}
           </Flex>
         </ActiveLink>
       </CanSee>
