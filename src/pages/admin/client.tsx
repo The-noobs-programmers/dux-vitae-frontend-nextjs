@@ -144,7 +144,7 @@ export default function ClientTable({ clients }: Clients) {
   };
 
   return (
-    <Flex flex="1" align="top" justify="center">
+    <Flex flex="1" align="top" justify="center" overflowX="hidden">
       <TableContainer w="80%" mt="45px">
         <Flex justify="space-between">
           <Flex flexDir="column">
@@ -163,30 +163,32 @@ export default function ClientTable({ clients }: Clients) {
           </Flex>
         </Flex>
 
-        <Table w="100%" variant="striped" colorScheme="whiteAlpha">
-          <TableCaption>Tabla de clientes</TableCaption>
-          <Thead>
-            <Tr>
-              <Th>Rut</Th>
-              <Th>Nombre</Th>
-              <Th>Apellido</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
+        <Flex overflowX="auto">
+          <Table w="100%" variant="striped" colorScheme="whiteAlpha">
+            <TableCaption>Tabla de clientes</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Rut</Th>
+                <Th>Nombre</Th>
+                <Th>Apellido</Th>
+                <Th></Th>
+              </Tr>
+            </Thead>
 
-          <Tbody>
-            {clientFiltered?.map((clients) => (
-              <ClientManagementTable
-                key={clients.rut}
-                rut={clients.rut}
-                name={clients.name}
-                lastName={clients.lastName}
-                state={"true"}
-                email={clients.email}
-              />
-            ))}
-          </Tbody>
-        </Table>
+            <Tbody>
+              {clientFiltered?.map((clients) => (
+                <ClientManagementTable
+                  key={clients.rut}
+                  rut={clients.rut}
+                  name={clients.name}
+                  lastName={clients.lastName}
+                  state={"true"}
+                  email={clients.email}
+                />
+              ))}
+            </Tbody>
+          </Table>
+        </Flex>
       </TableContainer>
 
       <Modal isOpen={isOpen} onClose={onClose}>

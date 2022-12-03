@@ -70,7 +70,7 @@ export default function NutritionistList({
   }, []);
 
   return (
-    <Flex flex="1" align="top" justify="center">
+    <Flex flex="1" align="top" justify="center" overflowX="hidden">
       <TableContainer w="80%" mt="45px">
         <Text mb="8px">Nutricionista:</Text>
         <Input
@@ -80,32 +80,34 @@ export default function NutritionistList({
           w="30%"
           minW="200px"
         />
-        <Table w="100%" variant="striped" colorScheme="whiteAlpha">
-          <TableCaption>Tabla de nutricionistas</TableCaption>
-          <Thead>
-            <Tr>
-              <Th>Rut</Th>
-              <Th>Nombre</Th>
-              <Th>Apellido</Th>
-              <Th></Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
+        <Flex overflowX="auto">
+          <Table w="100%" variant="striped" colorScheme="whiteAlpha">
+            <TableCaption>Tabla de nutricionistas</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Rut</Th>
+                <Th>Nombre</Th>
+                <Th>Apellido</Th>
+                <Th></Th>
+                <Th></Th>
+              </Tr>
+            </Thead>
 
-          <Tbody>
-            {nutritionistFiltered?.map((nutritionists) => (
-              <TableNutritionistList
-                key={nutritionists.rut}
-                request={rut.includes(nutritionists.rut)}
-                rutNutritionist={nutritionists.rut}
-                name={nutritionists.name}
-                lastName={nutritionists.lastName}
-                email={nutritionists.email}
-                onReloadPage={onReloadPage}
-              />
-            ))}
-          </Tbody>
-        </Table>
+            <Tbody>
+              {nutritionistFiltered?.map((nutritionists) => (
+                <TableNutritionistList
+                  key={nutritionists.rut}
+                  request={rut.includes(nutritionists.rut)}
+                  rutNutritionist={nutritionists.rut}
+                  name={nutritionists.name}
+                  lastName={nutritionists.lastName}
+                  email={nutritionists.email}
+                  onReloadPage={onReloadPage}
+                />
+              ))}
+            </Tbody>
+          </Table>
+        </Flex>
       </TableContainer>
     </Flex>
   );

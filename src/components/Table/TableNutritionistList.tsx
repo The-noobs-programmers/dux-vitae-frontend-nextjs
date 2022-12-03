@@ -93,18 +93,17 @@ export function TableNutritionistList({
 
         <Td>
           <Button
-            bg="#2C2C2C"
             name="Perfil"
             type="button"
             onClick={() => {
               setButtonComponent("profile"), onOpen();
             }}
+            bg="#2C2C2C"
+            size="sm"
           />
         </Td>
         <Td>
           <Button
-            bg="#3a025d"
-            borderColor="#60039a"
             name={request ? "Solicitado" : "Solicitar"}
             disabled={request}
             type="button"
@@ -112,6 +111,9 @@ export function TableNutritionistList({
               setButtonComponent("appointment"), onOpen();
             }}
             leftIcon={<RiPencilLine />}
+            bg="#3a025d"
+            borderColor="#60039a"
+            size="sm"
           />
         </Td>
       </Tr>

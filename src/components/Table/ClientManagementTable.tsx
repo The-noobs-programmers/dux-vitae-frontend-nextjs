@@ -42,7 +42,7 @@ export function ClientManagementTable({
           <Td>{lastName}</Td>
           {state === "true" ? null : <Td>Aceptado</Td>}
 
-          <Td display="flex" alignItems={"center"} justifyContent={"flex-end"}>
+          <Td display="flex" alignItems={"center"} justifyContent="flex-end">
             <Button
               name="Perfil"
               type="button"
@@ -50,6 +50,7 @@ export function ClientManagementTable({
                 onOpen();
               }}
               bg="#2e2e2e"
+              size="sm"
             />
           </Td>
         </Tr>
