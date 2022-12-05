@@ -103,8 +103,8 @@ export default function Dashboard() {
   });
 
   return (
-    <Flex flex="1" align="top" justify="center" overflowY="auto">
-      <Flex w="80%" mt="45px" flexDir="row">
+    <Flex flex="1" justify="center" overflowY="auto" mt="45px" mb="10px">
+      <Flex w="80%" flexDir="row">
         <SimpleGrid
           flex="1"
           gap="4"

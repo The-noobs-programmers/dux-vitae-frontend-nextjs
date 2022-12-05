@@ -43,7 +43,7 @@ const AppointmentSchema = yup.object().shape({
   description: yup.string().required("La descripción es requerida"),
 });
 
-export function TableNutritionistList({
+export function NutritionistListTable({
   rutNutritionist,
   name,
   lastName,

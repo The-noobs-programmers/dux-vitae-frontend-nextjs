@@ -13,7 +13,7 @@ import {
 import { GetServerSideProps } from "next";
 import Router from "next/router";
 import { useEffect, useMemo, useState } from "react";
-import { TableNutritionistList } from "../../components/Table/TableNutritionistList";
+import { NutritionistListTable } from "../../components/Table/NutritionistListTable";
 import { useToasts } from "../../hooks/useToasts";
 import { api } from "../../services/apiClient";
 
@@ -95,7 +95,7 @@ export default function NutritionistList({
 
             <Tbody>
               {nutritionistFiltered?.map((nutritionists) => (
-                <TableNutritionistList
+                <NutritionistListTable
                   key={nutritionists.rut}
                   request={rut.includes(nutritionists.rut)}
                   rutNutritionist={nutritionists.rut}
