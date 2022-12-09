@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, useBreakpointValue } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Router from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import { InputShowPassword } from "../../components/Form/InputShowPassword";
 import { useToasts } from "../../hooks/useToasts";
 import { api } from "../../services/apiClient";
 
-type SignInData = {
+type CreateClientProps = {
   rut: string;
   email: string;
   password: string;
@@ -18,7 +18,7 @@ type SignInData = {
   lastName: string;
 };
 
-const RegisterSchema = yup.object().shape({
+const CreateSchema = yup.object().shape({
   rut: yup
     .string()
     .required("El rut es requerido")
@@ -47,15 +47,16 @@ const RegisterSchema = yup.object().shape({
     .oneOf([null, yup.ref("password")], "Las contraseñas no coinciden"),
 });
 
-export function RegisterForm() {
+export function CreateClientForm() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignInData>({
-    resolver: yupResolver(RegisterSchema),
+  } = useForm<CreateClientProps>({
+    resolver: yupResolver(CreateSchema),
   });
 
+  const isTabletVersion = useBreakpointValue({ base: false, md: true });
   const { toastSuccess, toastError } = useToasts();
 
   let Fn = {
@@ -77,20 +78,20 @@ export function RegisterForm() {
     },
   };
 
-  const onSubmit: SubmitHandler<SignInData> = async (data) => {
+  const onSubmit: SubmitHandler<CreateClientProps> = async (data) => {
     if (Fn.validaRut(data.rut)) {
       api
         .post("/clients", data)
         .then((data) => {
           if (data.status === 200) {
             toastSuccess({
-              description: "Registro exitoso, ya puede iniciar sesión sesión",
+              description: "El usuario se ha creado correctamente",
             });
             Router.push("/");
           }
         })
         .catch((error) => {
-          console.log(error);
+          toastError({ description: "Algo anda mal :(" });
         });
     } else {
       toastError({ description: "El rut no existe" });
@@ -102,7 +103,7 @@ export function RegisterForm() {
       as="form"
       flexDir="column"
       h="100%"
-      w="100%"
+      w={isTabletVersion ? "50%" : "100%"}
       onSubmit={handleSubmit(onSubmit)}
       gap={4}
       mb={!errors.email || !errors.password ? "0" : 4}

@@ -20,28 +20,27 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { GetServerSideProps } from "next";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { RiUserAddLine } from "react-icons/ri";
 import * as yup from "yup";
-import { Button } from "../../components/Form/Button";
-import { Input } from "../../components/Form/Input";
-import { InputShowPassword } from "../../components/Form/InputShowPassword";
-import { ClientManagementTable } from "../../components/Table/ClientManagementTable";
-import { useToasts } from "../../hooks/useToasts";
-import { api } from "../../services/apiClient";
+import { Button } from "../../../components/Form/Button";
+import { Input } from "../../../components/Form/Input";
+import { InputShowPassword } from "../../../components/Form/InputShowPassword";
+import { ClientManagementTable } from "../../../components/Table/ClientManagementTable";
+import { useToasts } from "../../../hooks/useToasts";
+
+export type Client = {
+  rut: string;
+  email: string;
+  name: string;
+  lastName: string;
+  created_at: Date;
+};
 
 type Clients = {
-  clients: [
-    {
-      rut: string;
-      email: string;
-      name: string;
-      lastName: string;
-      created_at: Date;
-    }
-  ];
+  clients: [Client];
 };
 
 type SignInData = {
@@ -91,6 +90,8 @@ export default function ClientTable({ clients }: Clients) {
     resolver: yupResolver(RegisterSchema),
   });
 
+  const router = useRouter();
+
   const [search, setSearch] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -123,24 +124,31 @@ export default function ClientTable({ clients }: Clients) {
     },
   };
 
+  function deleteClient(client: string) {}
+
+  function editClientButton(clientData: Client) {
+    onOpen();
+  }
+
   const onSubmit: SubmitHandler<SignInData> = async (data) => {
-    if (Fn.validaRut(data.rut)) {
-      api
-        .post("/clients", data)
-        .then((data) => {
-          if (data.status === 200) {
-            toastSuccess({
-              description: "Registro exitoso, ya puede iniciar sesión sesión",
-            });
-            Router.push("/");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      toastError({ description: "El rut no existe" });
-    }
+    console.log("crear formulario");
+    // if (Fn.validaRut(data.rut)) {
+    //   api
+    //     .post("/clients", data)
+    //     .then((data) => {
+    //       if (data.status === 200) {
+    //         toastSuccess({
+    //           description: "Registro exitoso, ya puede iniciar sesión sesión",
+    //         });
+    //         Router.push("/");
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // } else {
+    //   toastError({ description: "El rut no existe" });
+    // }
   };
 
   return (
@@ -158,8 +166,19 @@ export default function ClientTable({ clients }: Clients) {
               minW="200px"
             />
           </Flex>
-          <Flex align="end">
-            <RiUserAddLine size="25px" cursor="pointer" onClick={onOpen} />
+          <Flex
+            align="end"
+            _hover={{
+              opacity: 0.8,
+            }}
+          >
+            <RiUserAddLine
+              size="25px"
+              cursor="pointer"
+              onClick={() => {
+                router.push("/admin/client/create");
+              }}
+            />
           </Flex>
         </Flex>
 
@@ -182,8 +201,9 @@ export default function ClientTable({ clients }: Clients) {
                   rut={clients.rut}
                   name={clients.name}
                   lastName={clients.lastName}
-                  state={"true"}
                   email={clients.email}
+                  created_at={clients.created_at}
+                  deleteClient={deleteClient}
                 />
               ))}
             </Tbody>
@@ -277,7 +297,7 @@ export default function ClientTable({ clients }: Clients) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const clients = [
     {
       rut: "12345678-1",
