@@ -45,10 +45,8 @@ export function LoginForm() {
   const onSubmit: SubmitHandler<SignInData> = async (data) => {
     try {
       await signIn(data);
-      console.log(data);
     } catch (err) {
       toastError({ description: "Usuario con estos datos no registrado" });
-      console.log(err);
     }
   };
 

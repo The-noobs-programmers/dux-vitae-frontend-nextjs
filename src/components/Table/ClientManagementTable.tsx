@@ -95,7 +95,6 @@ export function ClientManagementTable({
   };
 
   const onSubmit: SubmitHandler<UpdateData> = async (data) => {
-    console.log("editar formulario", data);
     // api
     //   .put(`/clients/${currentClient.rut}`, data)
     //   .then((data) => {

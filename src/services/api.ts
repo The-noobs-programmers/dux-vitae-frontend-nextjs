@@ -96,7 +96,7 @@ export function setupAPIClient(ctx = undefined) {
   //       } else {
   //         //Desconectar el usuario
   //         if (typeof window !== "undefined") {
-  //           console.log("Error en api");
+  //           ("Error en api");
 
   //           signOut();
   //         } else {

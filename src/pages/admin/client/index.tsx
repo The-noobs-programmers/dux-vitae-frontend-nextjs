@@ -132,7 +132,6 @@ export default function ClientTable({ clients }: Clients) {
   }
 
   const onSubmit: SubmitHandler<SignInData> = async (data) => {
-    console.log("crear formulario");
     // if (Fn.validaRut(data.rut)) {
     //   api
     //     .post("/clients", data)

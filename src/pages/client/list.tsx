@@ -63,7 +63,6 @@ export default function NutritionistList({
   }, [search, nutritionists]);
 
   useEffect(() => {
-    console.log(appointment);
     appointment?.map((appointment) => {
       setRut((rut) => [...rut, appointment.nutritionistRut]);
     });
