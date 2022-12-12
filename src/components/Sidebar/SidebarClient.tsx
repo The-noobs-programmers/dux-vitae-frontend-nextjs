@@ -7,12 +7,15 @@ import {
   RiUserHeartFill,
 } from "react-icons/ri";
 import { Logo } from "../../assets/Logo";
+import { useAuth } from "../../context/AuthContext";
 import { ActiveLink } from "../ActiveLink";
 import CanSee from "../CanSee";
 
 export function SidebarClient() {
   const isWebVersion = useBreakpointValue({ base: false, lg: true });
-  const user = ["admin", "client"];
+  const { user } = useAuth();
+  const role = user.role;
+
   return (
     <Flex
       position="sticky"
@@ -26,7 +29,7 @@ export function SidebarClient() {
         <Logo />
       </Flex>
 
-      <CanSee roles="client" role="client">
+      <CanSee role={role} roles="client">
         <ActiveLink href="/client/list">
           <Flex
             p={2}
@@ -44,7 +47,7 @@ export function SidebarClient() {
         </ActiveLink>
       </CanSee>
 
-      <CanSee roles="client" role="client">
+      <CanSee role={role} roles="client">
         <ActiveLink href="/client/profile">
           <Flex
             p={2}
@@ -61,7 +64,7 @@ export function SidebarClient() {
         </ActiveLink>
       </CanSee>
 
-      <CanSee roles="admin" role="admin">
+      <CanSee role={role} roles="admin">
         <ActiveLink href="/admin/dashboard">
           <Flex
             p={2}
@@ -79,7 +82,7 @@ export function SidebarClient() {
         </ActiveLink>
       </CanSee>
 
-      <CanSee roles="admin" role="admin">
+      <CanSee role={role} roles="admin">
         <ActiveLink href="/admin/client">
           <Flex
             p={2}
@@ -97,7 +100,7 @@ export function SidebarClient() {
         </ActiveLink>
       </CanSee>
 
-      <CanSee roles="nutritionist" role="nutritionist">
+      <CanSee role={role} roles="nutritionist">
         <ActiveLink href="/nutritionist/appointment">
           <Flex
             p={2}
