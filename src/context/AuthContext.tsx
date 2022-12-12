@@ -28,8 +28,8 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData);
 
-export function signOut() {
-  destroyCookie({}, "rut");
+export async function signOut() {
+  await destroyCookie({}, "rut");
 
   Router.push("/");
 }

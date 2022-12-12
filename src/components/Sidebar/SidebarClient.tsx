@@ -2,12 +2,13 @@ import { Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import {
   RiFileChartLine,
   RiFileList2Line,
+  RiLogoutBoxLine,
   RiSendPlaneLine,
   RiUserFollowFill,
   RiUserHeartFill,
 } from "react-icons/ri";
 import { Logo } from "../../assets/Logo";
-import { useAuth } from "../../context/AuthContext";
+import { signOut, useAuth } from "../../context/AuthContext";
 import { ActiveLink } from "../ActiveLink";
 import CanSee from "../CanSee";
 
@@ -38,6 +39,7 @@ export function SidebarClient() {
             bg="gray.800"
             _hover={{ filter: "brightness(120%)" }}
             align="center"
+            justify={isWebVersion ? "flex-start" : "center"}
             gap={2}
           >
             <RiFileList2Line size="25px" />
@@ -56,6 +58,7 @@ export function SidebarClient() {
             bg="gray.800"
             _hover={{ filter: "brightness(120%)" }}
             align="center"
+            justify={isWebVersion ? "flex-start" : "center"}
             gap={2}
           >
             <RiUserHeartFill size="25px" />
@@ -73,6 +76,7 @@ export function SidebarClient() {
             bg="gray.800"
             _hover={{ filter: "brightness(120%)" }}
             align="center"
+            justify={isWebVersion ? "flex-start" : "center"}
             gap={2}
           >
             <RiFileChartLine size="25px" />
@@ -91,6 +95,7 @@ export function SidebarClient() {
             bg="gray.800"
             _hover={{ filter: "brightness(120%)" }}
             align="center"
+            justify={isWebVersion ? "flex-start" : "center"}
             gap={2}
           >
             <RiUserFollowFill size="25px" />
@@ -109,6 +114,7 @@ export function SidebarClient() {
             bg="gray.800"
             _hover={{ filter: "brightness(120%)" }}
             align="center"
+            justify={isWebVersion ? "flex-start" : "center"}
             gap={2}
           >
             <RiSendPlaneLine size="25px" />
@@ -117,6 +123,24 @@ export function SidebarClient() {
           </Flex>
         </ActiveLink>
       </CanSee>
+
+      <Flex
+        p={2}
+        cursor="pointer"
+        transition="0.2s filter"
+        bg="gray.800"
+        _hover={{ filter: "brightness(120%)" }}
+        align="center"
+        justify={isWebVersion ? "flex-start" : "center"}
+        gap={2}
+        mt="auto"
+        mb="20px"
+        onClick={signOut}
+      >
+        <RiLogoutBoxLine size="25px" />
+
+        {isWebVersion && <Text fontSize="xl">Cerrar sesión</Text>}
+      </Flex>
     </Flex>
   );
 }
