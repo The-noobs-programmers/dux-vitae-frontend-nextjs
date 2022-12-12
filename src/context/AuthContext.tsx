@@ -28,8 +28,9 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData);
 
-export async function signOut() {
-  await destroyCookie({}, "rut");
+export function signOut() {
+  destroyCookie(null, "rut");
+  destroyCookie({}, "role");
 
   Router.push("/");
 }
@@ -43,7 +44,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User);
 
   async function signIn({ email, password }: SignInCredentials) {
-    console.log("signIn", email, password);
     try {
       const response = await api.post("/api/login", {
         email,
@@ -55,6 +55,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const { rut, name, lastName, role } = response.data;
 
       setCookie(undefined, "rut", rut, {
+        maxAge: 60 * 60 * 24 * 30, //30 dias
+        path: "/",
+      });
+
+      setCookie(undefined, "role", role, {
         maxAge: 60 * 60 * 24 * 30, //30 dias
         path: "/",
       });

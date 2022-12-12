@@ -1,4 +1,6 @@
 import { Flex, Text, useBreakpointValue } from "@chakra-ui/react";
+import { parseCookies } from "nookies";
+import { useEffect, useState } from "react";
 import {
   RiFileChartLine,
   RiFileList2Line,
@@ -12,10 +14,28 @@ import { signOut, useAuth } from "../../context/AuthContext";
 import { ActiveLink } from "../ActiveLink";
 import CanSee from "../CanSee";
 
+interface RoleProps {
+  role: "admin" | "client" | "nutritionist";
+}
+
 export function SidebarClient() {
   const isWebVersion = useBreakpointValue({ base: false, lg: true });
+  const [role, setRole] = useState("");
   const { user } = useAuth();
-  const role = user.role;
+
+  useEffect(() => {
+    if (user.role === undefined) {
+      const cookies = parseCookies();
+
+      setRole(cookies.role);
+    } else {
+      setRole(user.role);
+    }
+  }, [user.role]);
+
+  console.log(role);
+
+  useEffect(() => {}, [role]);
 
   return (
     <Flex

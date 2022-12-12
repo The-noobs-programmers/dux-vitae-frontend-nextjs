@@ -1,6 +1,6 @@
 type CanSeeProps = {
   roles: "admin" | "client" | "nutritionist";
-  role: "admin" | "client" | "nutritionist";
+  role: string;
   children: React.ReactNode;
 };
 
