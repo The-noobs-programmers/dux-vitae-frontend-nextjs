@@ -125,7 +125,19 @@ export default function ClientTable({ clients }: Clients) {
     },
   };
 
-  function deleteClient(client: string) {}
+  function deleteClient(rut: string) {
+    api
+      .delete(`/api/users/deleteByRut/${rut}`)
+      .then((data) => {
+        if (data.status === 200) {
+          toastSuccess({ description: "Cliente eliminado" });
+          router.push("/admin/client");
+        }
+      })
+      .catch((error) => {
+        toastError({ description: `Error al eliminar cliente, ${error}}` });
+      });
+  }
 
   function editClientButton(clientData: Client) {
     onOpen();

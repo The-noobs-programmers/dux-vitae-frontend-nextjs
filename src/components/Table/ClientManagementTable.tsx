@@ -14,11 +14,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import * as yup from "yup";
+import { useToasts } from "../../hooks/useToasts";
+import { api } from "../../services/apiClient";
 import { Button } from "../Form/Button";
 import { Input } from "../Form/Input";
 import { InputShowPassword } from "../Form/InputShowPassword";
@@ -85,6 +88,8 @@ export function ClientManagementTable({
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [handleModal, setHandleModal] = useState("profile");
+  const { toastSuccess, toastError } = useToasts();
+  const router = useRouter();
 
   const currentUser = {
     rut,
@@ -95,17 +100,17 @@ export function ClientManagementTable({
   };
 
   const onSubmit: SubmitHandler<UpdateData> = async (data) => {
-    // api
-    //   .put(`/clients/${currentClient.rut}`, data)
-    //   .then((data) => {
-    //     if (data.status === 200) {
-    //       toastSuccess({ description: "Cliente editado con éxito" });
-    //       Router.reload();
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    api
+      .put(`/api/users/updateClientByRut/${rut}`, data)
+      .then((data) => {
+        if (data.status === 200) {
+          toastSuccess({ description: "Cliente editado con éxito" });
+          router.push("/admin/client");
+        }
+      })
+      .catch((error) => {
+        toastError({ description: "Error al editar cliente" });
+      });
   };
 
   return (
@@ -280,14 +285,6 @@ export function ClientManagementTable({
                   idName="editPassword"
                   label="Contraseña"
                   {...register("password")}
-                />
-
-                <Input
-                  type="password"
-                  idName="passwordConfirmation"
-                  label="Confirmar contraseña"
-                  error={errors.passwordConfirmation}
-                  {...register("passwordConfirmation")}
                 />
               </Flex>
             </ModalBody>
