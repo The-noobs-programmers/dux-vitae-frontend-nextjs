@@ -1,7 +1,9 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
+import { AuthContext } from "../../context/AuthContext";
 import { useToasts } from "../../hooks/useToasts";
 import { Button } from "../Form/Button";
 import { Input } from "../Form/Input";
@@ -38,14 +40,15 @@ export function LoginForm() {
 
   const { toastError } = useToasts();
 
-  // const { signIn } = useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
 
   const onSubmit: SubmitHandler<SignInData> = async (data) => {
     try {
-      // await signIn(data);
+      await signIn(data);
       console.log(data);
     } catch (err) {
       toastError({ description: "Usuario con estos datos no registrado" });
+      console.log(err);
     }
   };
 
