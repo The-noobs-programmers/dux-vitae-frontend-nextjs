@@ -1,10 +1,18 @@
-import { Avatar, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Flex,
+  SimpleGrid,
+  Text,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { GetServerSideProps } from "next";
-import Router from "next/router";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
+import { format } from "date-fns";
+import nookies from "nookies";
 import { RiMailLine } from "react-icons/ri";
 import * as yup from "yup";
 import { Button } from "../../components/Form/Button";
@@ -14,18 +22,20 @@ import { Textarea } from "../../components/Form/Textarea";
 import { useToasts } from "../../hooks/useToasts";
 import { api } from "../../services/apiClient";
 
+interface ClientData {
+  rut?: string;
+  name: string;
+  lastName: string;
+  email: string;
+  birthday: string;
+  gender?: string;
+  phone?: string;
+  createdAt: string;
+  description?: string;
+}
+
 type ClientProfileProps = {
-  clientData: {
-    rut?: string;
-    name: string;
-    lastName: string;
-    email: string;
-    birthday?: string;
-    gender?: string;
-    phone?: string;
-    created_at?: string;
-    description?: string;
-  };
+  clientData: ClientData;
 };
 
 type UpdateData = {
@@ -34,9 +44,33 @@ type UpdateData = {
   birthday?: string;
   gender?: string;
   phone?: string;
-  created_at?: string;
+  createdAt?: string;
   description?: string;
 };
+
+function formatDate(date: string) {
+  !date && "";
+
+  const newDate = new Date(date);
+
+  let day;
+  let month;
+  if (newDate.getDate() + 1 < 10) {
+    day = "0" + (newDate.getDate() + 1);
+  } else {
+    day = newDate.getDate() + 1;
+  }
+
+  if (newDate.getMonth() + 1 < 10) {
+    month = "0" + (newDate.getMonth() + 1);
+  } else {
+    month = newDate.getMonth() + 1;
+  }
+
+  let year = newDate.getFullYear();
+
+  return `${year}-${month}-${day}`;
+}
 
 const UpdateSchema = yup.object().shape({
   name: yup
@@ -68,27 +102,25 @@ export default function ClientProfile({ clientData }: ClientProfileProps) {
     resolver: yupResolver(UpdateSchema),
   });
 
-  const nameClient = clientData?.name + " " + clientData?.lastName;
+  const nameClient = clientData.name + " " + clientData.lastName;
   const [dateCreatedClient, setDateCreatedClient] = useState("");
   const { toastSuccess, toastError } = useToasts();
+  const router = useRouter();
 
-  useEffect(() => {
-    const date = new Date(Date.now());
-    setDateCreatedClient(
-      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
-    );
-  }, []);
+  const isTabletVersion = useBreakpointValue({ base: false, md: true });
 
   const onSubmit: SubmitHandler<UpdateData> = async (data) => {
     api
-      .put(`/clients/${clientData.rut}`, data)
+      .put(`/api/users/updateByRut/${clientData.rut}`, data)
       .then((res) => {
         if (res.status === 200) {
           toastSuccess({ description: "Datos actualizados correctamente" });
-          Router.push("/client/profile");
+          router.push("/client/profile");
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        toastError({ description: `Error al actualizar los datos, ${err}` });
+      });
   };
 
   return (
@@ -137,8 +169,8 @@ export default function ClientProfile({ clientData }: ClientProfileProps) {
               <Input
                 type={"date"}
                 idName="birthday"
-                label="Fecha de nacimiento"
-                defaultValue={clientData?.birthday ? clientData.birthday : ""}
+                label={isTabletVersion ? "Fecha de nacimiento" : "Nacimiento"}
+                defaultValue={!!clientData.birthday ? clientData.birthday : ""}
                 error={errors.birthday}
                 {...register("birthday")}
               />
@@ -208,65 +240,78 @@ export default function ClientProfile({ clientData }: ClientProfileProps) {
         </Flex>
 
         {/* profile */}
-        <Flex
-          align={"top"}
-          justifyContent={"center"}
-          pl={2}
-          pr={2}
-          w={"25rem"}
-          flex="1"
-        >
+        {isTabletVersion && (
           <Flex
-            marginTop={20}
-            align={"center"}
-            flexDir={"column"}
-            w={"80%"}
-            h={"60%"}
-            borderRadius={"5px"}
-            gap={8}
+            align={"top"}
+            justifyContent={"center"}
+            pl={2}
+            pr={2}
+            w={"25rem"}
+            flex="1"
           >
-            <Avatar top={-12} w={"6rem"} h={"6rem"} name={nameClient} />
+            <Flex
+              marginTop={20}
+              align={"center"}
+              flexDir={"column"}
+              w={"80%"}
+              h={"60%"}
+              borderRadius={"5px"}
+              gap={8}
+            >
+              <Avatar top={-12} w={"6rem"} h={"6rem"} name={nameClient} />
 
-            <Text fontSize={"1.2rem"} fontWeight={"medium"}>
-              {nameClient}
-            </Text>
+              <Text fontSize={"1.2rem"} fontWeight={"medium"}>
+                {nameClient}
+              </Text>
 
-            <Text fontSize="0.9rem">
-              {clientData?.description
-                ? clientData?.description
-                : "Descripción personal"}
-            </Text>
+              <Text fontSize="0.9rem">
+                {clientData?.description
+                  ? clientData?.description
+                  : "Descripción personal"}
+              </Text>
 
-            <Text as="i">
-              <q>Nunca es tarde para cambiar tu estilo de vida.</q>
-            </Text>
+              <Text as="i">
+                <q>Nunca es tarde para cambiar tu estilo de vida.</q>
+              </Text>
 
-            <Flex alignItems="center" justifyContent="center" gap="5px">
-              <RiMailLine />
-              <Text fontSize="0.9rem">{clientData?.email}</Text>
+              <Flex alignItems="center" justifyContent="center" gap="5px">
+                <RiMailLine />
+                <Text fontSize="0.9rem">{clientData?.email}</Text>
+              </Flex>
+
+              <Text fontSize="0.7rem">
+                Cuenta creada el{" "}
+                {format(new Date(clientData.createdAt), "dd-MMM-yyyy")}
+              </Text>
             </Flex>
-
-            <Text fontSize="0.7rem">Cuenta creada el {dateCreatedClient}</Text>
           </Flex>
-        </Flex>
+        )}
       </Flex>
     </Flex>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
-    const clientData = {
-      rut: "12345638-2",
-      name: "Felipe",
-      lastName: "Perez",
-      email: "felipe@email.com",
-      birthday: "1990-01-01",
-      gender: "Masculino",
-      phone: "123456789",
-      created_at: "Thu Dec 01 2022 23:58:45 GMT-0300",
-      description: "Descripción personal",
-    };
+    const { rut } = nookies.get(ctx);
+
+    const response = await api.get(`/api/users/findUsersByRut/${rut}`);
+
+    let clientData = {};
+
+    response.data.map((client: ClientData) => {
+      clientData = {
+        rut: client.rut,
+        name: client.name,
+        lastName: client.lastName,
+        email: client.email,
+        birthday: formatDate(client.birthday),
+        gender: client.gender,
+        phone: client.phone,
+        createdAt: client.createdAt,
+        description: client.description,
+      };
+    });
 
     return {
       props: {
