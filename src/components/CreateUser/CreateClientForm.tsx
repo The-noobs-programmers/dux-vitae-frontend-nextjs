@@ -100,8 +100,9 @@ export function CreateClientForm() {
           }
         })
         .catch((error) => {
+          console.log(error);
           toastError({
-            description: `No pudo lograrse el registro :(  ${error}`,
+            description: `No pudo lograrse el registro :(  ${error.response.data.message}`,
           });
         });
     } else {

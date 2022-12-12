@@ -197,8 +197,8 @@ export default function ClientProfile({ clientData }: ClientProfileProps) {
                 )}
 
                 {clientData.gender !== "Femenino" && (
-                  <option value="Femenina" style={{ background: "#383838" }}>
-                    Femenina
+                  <option value="Femenino" style={{ background: "#383838" }}>
+                    Femenino
                   </option>
                 )}
 
