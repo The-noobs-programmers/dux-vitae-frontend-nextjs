@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { Button } from "../../components/Form/Button";
@@ -57,6 +57,7 @@ export function RegisterForm() {
   });
 
   const { toastSuccess, toastError } = useToasts();
+  const router = useRouter();
 
   let Fn = {
     // Valida el rut con su cadena completa "XXXXXXXX-X"
@@ -79,18 +80,28 @@ export function RegisterForm() {
 
   const onSubmit: SubmitHandler<SignInData> = async (data) => {
     if (Fn.validaRut(data.rut)) {
+      const client = {
+        rut: data.rut,
+        name: data.name,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        role: "client",
+      };
       api
-        .post("/clients", data)
-        .then((data) => {
-          if (data.status === 200) {
+        .post("/api/users", client)
+        .then((res) => {
+          if (res.status === 200) {
             toastSuccess({
               description: "Registro exitoso, ya puede iniciar sesión sesión",
             });
-            Router.push("/");
+            router.push("/");
           }
         })
         .catch((error) => {
-          console.log(error);
+          toastError({
+            description: `No pudo lograrse el registro :(  ${error}`,
+          });
         });
     } else {
       toastError({ description: "El rut no existe" });

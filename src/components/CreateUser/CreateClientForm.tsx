@@ -1,6 +1,6 @@
 import { Flex, useBreakpointValue } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { Button } from "../../components/Form/Button";
@@ -58,6 +58,7 @@ export function CreateClientForm() {
 
   const isTabletVersion = useBreakpointValue({ base: false, md: true });
   const { toastSuccess, toastError } = useToasts();
+  const router = useRouter();
 
   let Fn = {
     // Valida el rut con su cadena completa "XXXXXXXX-X"
@@ -80,18 +81,28 @@ export function CreateClientForm() {
 
   const onSubmit: SubmitHandler<CreateClientProps> = async (data) => {
     if (Fn.validaRut(data.rut)) {
+      const client = {
+        rut: data.rut,
+        name: data.name,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        role: "client",
+      };
       api
-        .post("/clients", data)
-        .then((data) => {
-          if (data.status === 200) {
+        .post("/api/users", client)
+        .then((res) => {
+          if (res.status === 200) {
             toastSuccess({
-              description: "El usuario se ha creado correctamente",
+              description: "Registro exitoso, ya puede iniciar sesión sesión",
             });
-            Router.push("/");
+            router.push("/admin/client");
           }
         })
         .catch((error) => {
-          toastError({ description: "Algo anda mal :(" });
+          toastError({
+            description: `No pudo lograrse el registro :(  ${error}`,
+          });
         });
     } else {
       toastError({ description: "El rut no existe" });

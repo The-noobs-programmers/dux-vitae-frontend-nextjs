@@ -113,7 +113,7 @@ export default function NutritionistList({
   );
 }
 
-export const getServerSideProps: GetServerSideProps = (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
     const nutritionistArrayObject = [
       {
@@ -146,6 +146,7 @@ export const getServerSideProps: GetServerSideProps = (ctx) => {
       { nutritionistRut: "12345678-2" },
       { nutritionistRut: "12345678-6" },
       { nutritionistRut: "12345678-7" },
+      { nutritionistRut: "12345678-3" },
     ];
 
     return {

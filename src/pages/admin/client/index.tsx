@@ -30,6 +30,7 @@ import { Input } from "../../../components/Form/Input";
 import { InputShowPassword } from "../../../components/Form/InputShowPassword";
 import { ClientManagementTable } from "../../../components/Table/ClientManagementTable";
 import { useToasts } from "../../../hooks/useToasts";
+import { api } from "../../../services/apiClient";
 
 export type Client = {
   rut: string;
@@ -298,40 +299,52 @@ export default function ClientTable({ clients }: Clients) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const clients = [
-    {
-      rut: "12345678-1",
-      email: "client122@email.com",
-      name: "Kevin",
-      lastName: "Perez",
+  const response = await api.get("/api/users");
+
+  const clientData: Clients = response.data.map((client: Client) => {
+    return {
+      rut: client.rut,
+      email: client.email,
+      name: client.name,
+      lastName: client.lastName,
       created_at: "2021-08-01",
-    },
-    {
-      rut: "12345678-9",
-      email: "client1@email.com",
-      name: "Juan",
-      lastName: "Perez",
-      created_at: "2021-08-01",
-    },
-    {
-      rut: "12345678-2",
-      email: "client2@email.com",
-      name: "Pedro",
-      lastName: "Perez",
-      created_at: "2021-08-01",
-    },
-    {
-      rut: "12345678-3",
-      email: "client3@email.com",
-      name: "Leandro",
-      lastName: "Perez",
-      created_at: "2021-08-01",
-    },
-  ];
+    };
+  });
+
+  // const clients = [
+  //   {
+  //     rut: "12345678-1",
+  //     email: "client122@email.com",
+  //     name: "Kevin",
+  //     lastName: "Perez",
+  //     created_at: "2021-08-01",
+  //   },
+  //   {
+  //     rut: "12345678-9",
+  //     email: "client1@email.com",
+  //     name: "Juan",
+  //     lastName: "Perez",
+  //     created_at: "2021-08-01",
+  //   },
+  //   {
+  //     rut: "12345678-2",
+  //     email: "client2@email.com",
+  //     name: "Pedro",
+  //     lastName: "Perez",
+  //     created_at: "2021-08-01",
+  //   },
+  //   {
+  //     rut: "12345678-3",
+  //     email: "client3@email.com",
+  //     name: "Leandro",
+  //     lastName: "Perez",
+  //     created_at: "2021-08-01",
+  //   },
+  // ];
 
   return {
     props: {
-      clients,
+      clients: clientData,
     },
   };
 };
