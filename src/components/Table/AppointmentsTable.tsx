@@ -13,14 +13,16 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import { parseCookies } from "nookies";
-import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { useRouter } from "next/router";
 import { MdOutlineHourglassBottom } from "react-icons/md";
 import {
   RiCheckFill,
   RiDeleteBinLine,
   RiInformationLine,
 } from "react-icons/ri";
+import { useToasts } from "../../hooks/useToasts";
+import { api } from "../../services/apiClient";
 import { Button } from "../Form/Button";
 
 type ClientAppointmentProps = {
@@ -28,7 +30,7 @@ type ClientAppointmentProps = {
   email: string;
   name: string;
   lastName: string;
-  created_at: string;
+  description?: string;
 };
 
 type TableContentProps = {
@@ -36,9 +38,8 @@ type TableContentProps = {
   title: string;
   description: string;
   state: Boolean;
+  createdAt: string;
   client: ClientAppointmentProps;
-  rejectRequest: (id: string) => void;
-  acceptRequest: (id: string) => void;
 };
 
 export function AppointmentsTable({
@@ -46,17 +47,44 @@ export function AppointmentsTable({
   title,
   description,
   state,
+  createdAt,
   client,
-  rejectRequest,
-  acceptRequest,
 }: TableContentProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [run, setRun] = useState("");
+  const { toastSuccess, toastError } = useToasts();
+  const router = useRouter();
 
-  useEffect(() => {
-    const cookies = parseCookies(undefined);
-    setRun(cookies["rut"]);
-  }, []);
+  async function changeAppointmentStatus() {
+    try {
+      let isState = !state;
+      const response = await api.put(
+        `/api/appointments/updateAppointmentState/${id}`,
+        { state: isState }
+      );
+
+      if (isState) {
+        toastSuccess({ description: "Solicitud aceptada" });
+      } else {
+        toastSuccess({ description: "Solicitud rechazada" });
+      }
+
+      router.push("/nutritionist/appointment");
+    } catch (error) {
+      toastError({ description: "Error al aceptar solicitud" });
+    }
+  }
+
+  async function deleteAppointment() {
+    try {
+      const response = await api.delete(`/api/appointments/${id}`);
+
+      toastSuccess({ description: "Se elimino correctamente" });
+
+      router.push("/nutritionist/appointment");
+    } catch (error) {
+      toastError({ description: "Error al aceptar solicitud" });
+    }
+  }
 
   return (
     <>
@@ -65,9 +93,7 @@ export function AppointmentsTable({
           w="100px"
           align="center"
           bg={state ? "#2ea043" : "#a70606"}
-          onClick={() => {
-            !!state ? null : acceptRequest(id);
-          }}
+          onClick={changeAppointmentStatus}
           cursor={!!state ? "default" : "pointer"}
         >
           <Flex w="100%" justify="center">
@@ -78,15 +104,16 @@ export function AppointmentsTable({
             )}
           </Flex>
         </Td>
-        <Td>Kevin Cruz</Td>
-        <Td>13/13/13</Td>
+        <Td>{client.rut}</Td>
+        <Td>{client.name + " " + client.lastName}</Td>
+        <Td>{format(new Date(createdAt), "dd-MMM-yyyy")}</Td>
         <Td>
           <Flex gap={5}>
             <RiInformationLine size="25px" onClick={onOpen} cursor="pointer" />
             <RiDeleteBinLine
               size="25px"
               onClick={() => {
-                rejectRequest(id);
+                deleteAppointment();
               }}
               cursor="pointer"
             />
@@ -183,24 +210,24 @@ export function AppointmentsTable({
                 <Text fontSize={"1rem"} fontWeight={"bold"}>
                   Descripción
                 </Text>
-                <Text paddingLeft={1}>Nada.</Text>
+                <Text paddingLeft={1}>{client.description}</Text>
               </Flex>
             </Flex>
           </ModalBody>
 
           <ModalFooter gap={3}>
             <Button
-              name="Rechazar"
+              name="Eliminar"
               onClick={() => {
-                rejectRequest(id);
+                deleteAppointment();
                 onClose();
               }}
               bg="transparent"
             />
             <Button
-              name="Aceptar"
+              name={state ? "Rechazar" : "Aceptar"}
               onClick={() => {
-                acceptRequest(id);
+                changeAppointmentStatus();
                 onClose();
               }}
               borderColor="#02d102"

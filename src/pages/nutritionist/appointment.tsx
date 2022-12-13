@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import nookies from "nookies";
 import { AppointmentsTable } from "../../components/Table/AppointmentsTable";
 import { useToasts } from "../../hooks/useToasts";
 import { api } from "../../services/apiClient";
@@ -20,8 +21,18 @@ interface ClientAppointmentProps {
   email: string;
   name: string;
   lastName: string;
-  created_at: string;
+  description?: string;
 }
+
+type Appointment = {
+  _id: string;
+  title: string;
+  description: string;
+  state: Boolean;
+  createdAt: string;
+  client: ClientAppointmentProps;
+  nutritionistRut: string;
+};
 
 interface AppointmentProps {
   appointment: [
@@ -30,6 +41,7 @@ interface AppointmentProps {
       title: string;
       description: string;
       state: Boolean;
+      createdAt: string;
       client: ClientAppointmentProps;
       rejectRequest: (id: string) => void;
       acceptRequest: (id: string) => void;
@@ -53,23 +65,11 @@ export default function HandleAppointment({ appointment }: AppointmentProps) {
     }
   }
 
-  async function acceptRequest(id: string) {
-    try {
-      //Ruta por si acepta la solicitud
-      const response = await api.put(`/appointments/${id}`);
-      if (typeof window !== undefined) {
-        toastSuccess({ description: "Solicitud aceptada" });
-      }
-    } catch (err) {
-      toastError({ description: "Error al aceptar solicitud" });
-    }
-  }
-
   return (
     <Flex flex="1" justify="center" overflowY="auto" mt="45px" mb="10px">
       <Flex w="80%" flexDir="column">
         <Flex>
-          <Text>Hola</Text>
+          <Text>Solicitudes</Text>
         </Flex>
 
         <TableContainer w="100%">
@@ -78,8 +78,9 @@ export default function HandleAppointment({ appointment }: AppointmentProps) {
             <Thead>
               <Tr>
                 <Th>Estado</Th>
+                <Th>Rut</Th>
                 <Th>Nombre</Th>
-                <Th>Fecha</Th>
+                <Th>Fecha de solicitud</Th>
                 <Th></Th>
               </Tr>
             </Thead>
@@ -93,8 +94,7 @@ export default function HandleAppointment({ appointment }: AppointmentProps) {
                     description={appointment.description}
                     state={appointment.state}
                     client={appointment.client}
-                    rejectRequest={rejectRequest}
-                    acceptRequest={acceptRequest}
+                    createdAt={appointment.createdAt}
                   />
                 );
               })}
@@ -106,40 +106,35 @@ export default function HandleAppointment({ appointment }: AppointmentProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
-    const appointment = [
-      {
-        id: "1",
-        title: "Cita 1",
-        description: "Cita 1",
-        state: true,
+    const { rut } = nookies.get(ctx);
+
+    const response = await api.get(
+      `/api/appointments/findByNutritionistRut/${rut}`
+    );
+    console.log(response);
+
+    const appointmentData = response.data.map((appointment: Appointment) => {
+      return {
+        id: appointment._id,
+        title: appointment.title,
+        description: appointment.description,
+        state: appointment.state,
         client: {
-          rut: "1",
-          email: "1",
-          name: "1",
-          lastName: "1",
-          created_at: "1",
+          rut: appointment.client.rut,
+          email: appointment.client.email,
+          name: appointment.client.name,
+          lastName: appointment.client.lastName,
+          description: appointment.client.description,
         },
-      },
-      {
-        id: "2",
-        title: "Cita 2",
-        description: "Cita 2",
-        state: false,
-        client: {
-          rut: "2",
-          email: "2",
-          name: "2",
-          lastName: "2",
-          created_at: "2",
-        },
-      },
-    ];
+        createdAt: appointment.createdAt,
+      };
+    });
 
     return {
       props: {
-        appointment,
+        appointment: appointmentData,
       },
     };
   } catch (error) {
