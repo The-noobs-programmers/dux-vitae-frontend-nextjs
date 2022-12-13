@@ -14,6 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { format } from "date-fns";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -39,7 +40,8 @@ type TableContentProps = {
   name: string;
   lastName: string;
   email: string;
-  created_at: Date;
+  createdAt: string;
+  description: string;
   deleteClient: (rut: string) => void;
 };
 
@@ -75,8 +77,9 @@ export function ClientManagementTable({
   name,
   lastName,
   email,
-  created_at,
+  createdAt,
   deleteClient,
+  description,
 }: TableContentProps) {
   const {
     register,
@@ -91,14 +94,6 @@ export function ClientManagementTable({
   const { toastSuccess, toastError } = useToasts();
   const router = useRouter();
 
-  const currentUser = {
-    rut,
-    name,
-    lastName,
-    email,
-    created_at,
-  };
-
   const onSubmit: SubmitHandler<UpdateData> = async (data) => {
     api
       .put(`/api/users/updateClientByRut/${rut}`, data)
@@ -106,6 +101,7 @@ export function ClientManagementTable({
         if (data.status === 200) {
           toastSuccess({ description: "Cliente editado con éxito" });
           router.push("/admin/client");
+          onClose();
         }
       })
       .catch((error) => {
@@ -184,7 +180,7 @@ export function ClientManagementTable({
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1.1rem"} fontWeight={"bold"}>
+                  <Text fontSize={"1rem"} fontWeight={"bold"}>
                     Rut:
                   </Text>
                   <Text paddingLeft={1}>{rut}</Text>
@@ -196,7 +192,7 @@ export function ClientManagementTable({
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1.1rem"} fontWeight={"bold"}>
+                  <Text fontSize={"1rem"} fontWeight={"bold"}>
                     Nombre:
                   </Text>
                   <Text paddingLeft={1}>{name + " " + lastName}</Text>
@@ -208,7 +204,7 @@ export function ClientManagementTable({
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1.1rem"} fontWeight={"bold"}>
+                  <Text fontSize={"1rem"} fontWeight={"bold"}>
                     Email:
                   </Text>
                   <Text paddingLeft={1}>{email}</Text>
@@ -220,10 +216,26 @@ export function ClientManagementTable({
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1.1rem"} fontWeight={"bold"}>
+                  <Text fontSize={"1rem"} fontWeight={"bold"}>
                     Descripción
                   </Text>
-                  <Text paddingLeft={1}>Nada.</Text>
+                  <Text paddingLeft={1}>
+                    {!description ? "Sin descripción" : description}
+                  </Text>
+                </Flex>
+
+                <Flex
+                  borderRadius={"5"}
+                  flexDir={"column"}
+                  flex="1"
+                  paddingLeft={3}
+                >
+                  <Text fontSize={"1rem"} fontWeight={"bold"}>
+                    Fecha de creación
+                  </Text>
+                  <Text paddingLeft={1}>
+                    {format(new Date(createdAt), "dd-MMM-yyyy")}.
+                  </Text>
                 </Flex>
               </Flex>
             </ModalBody>
