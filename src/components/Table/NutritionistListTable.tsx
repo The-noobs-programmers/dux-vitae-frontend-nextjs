@@ -14,23 +14,30 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { parseCookies } from "nookies";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { RiPencilLine } from "react-icons/ri";
 import * as yup from "yup";
 import { Button } from "../../components/Form/Button";
 import { Input } from "../../components/Form/Input";
 import { useToasts } from "../../hooks/useToasts";
+import { api } from "../../services/apiClient";
 
 type TableContentProps = {
   rutNutritionist?: string;
-  name?: string;
-  lastName?: string;
+  name: string;
+  lastName: string;
   state?: string;
   request?: boolean;
   email?: string;
-  onReloadPage: (data: any) => void;
+  client: {
+    rut: string;
+    name: string;
+    lastName: string;
+    email: string;
+    description?: string;
+  };
 };
 
 type AppointmentData = {
@@ -47,10 +54,9 @@ export function NutritionistListTable({
   rutNutritionist,
   name,
   lastName,
-  state,
   request = false,
   email,
-  onReloadPage,
+  client,
 }: TableContentProps) {
   const {
     register,
@@ -62,26 +68,34 @@ export function NutritionistListTable({
 
   const [buttonComponent, setButtonComponent] = useState<string>("profile");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [run, setRun] = useState("");
   const { toastSuccess, toastError } = useToasts();
+  const router = useRouter();
 
-  useEffect(() => {
-    const cookies = parseCookies(undefined);
-    setRun(cookies["rut"]);
-  }, []);
+  const onSubmit: SubmitHandler<AppointmentData> = async (data) => {
+    try {
+      const appointmentData = {
+        title: data.title,
+        description: data.description,
+        nutritionistRut: rutNutritionist,
+        client: {
+          rut: client.rut,
+          name: client.name,
+          lastName: client.lastName,
+          email: client.email,
+          description: client.description,
+        },
+        state: false,
+      };
 
-  const onSubmit: SubmitHandler<AppointmentData> = async ({
-    title,
-    description,
-  }) => {
-    const data = {
-      title,
-      description,
-      nutritionistRut: rutNutritionist,
-      clientRut: run,
-    };
+      const response = await api.post("/api/appointments", appointmentData);
 
-    onReloadPage(data);
+      router.push("/client/list");
+      onClose();
+
+      toastSuccess({ description: "Solicitud enviada" });
+    } catch (error) {
+      toastError({ description: "Error al enviar solicitud" });
+    }
   };
 
   return (

@@ -11,11 +11,19 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
-import Router from "next/router";
+import nookies from "nookies";
 import { useEffect, useMemo, useState } from "react";
 import { NutritionistListTable } from "../../components/Table/NutritionistListTable";
 import { useToasts } from "../../hooks/useToasts";
 import { api } from "../../services/apiClient";
+
+interface ClientData {
+  rut: string;
+  name: string;
+  lastName: string;
+  email: string;
+  description?: string;
+}
 
 interface NutritionistProps {
   rut: string;
@@ -30,29 +38,17 @@ interface AppointmentProps {
 interface NutritionistListProps {
   nutritionists: NutritionistProps[];
   appointment: AppointmentProps[];
+  client: ClientData;
 }
 
 export default function NutritionistList({
   nutritionists,
   appointment,
+  client,
 }: NutritionistListProps) {
   const [rut, setRut] = useState<string[]>([]);
   const { toastSuccess, toastError } = useToasts();
   const [search, setSearch] = useState("");
-
-  async function onReloadPage(data: any) {
-    try {
-      api.post("/appointments", data);
-
-      toastSuccess({ description: "Solicitud generada" });
-
-      setTimeout(() => {
-        Router.reload();
-      }, 3000);
-    } catch (error) {
-      toastError({ description: "Error al generar solicitud" });
-    }
-  }
 
   const nutritionistFiltered = useMemo(() => {
     const lowerSearch = search.toLowerCase();
@@ -66,7 +62,7 @@ export default function NutritionistList({
     appointment?.map((appointment) => {
       setRut((rut) => [...rut, appointment.nutritionistRut]);
     });
-  }, []);
+  }, [appointment]);
 
   return (
     <Flex flex="1" align="top" justify="center" overflowX="hidden">
@@ -101,7 +97,7 @@ export default function NutritionistList({
                   name={nutritionists.name}
                   lastName={nutritionists.lastName}
                   email={nutritionists.email}
-                  onReloadPage={onReloadPage}
+                  client={client}
                 />
               ))}
             </Tbody>
@@ -114,44 +110,48 @@ export default function NutritionistList({
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
-    const nutritionistArrayObject = [
-      {
-        rut: "12345678-2",
-        name: "Juan",
-        lastName: "Perez",
-        email: "juan1@email.com",
-      },
-      {
-        rut: "12345678-3",
-        name: "Pedro",
-        lastName: "Perez",
-        email: "juan2@email.com",
-      },
-      {
-        rut: "12345678-4",
-        name: "Pablo",
-        lastName: "Perez",
-        email: "juan3@email.com",
-      },
-      {
-        rut: "12345678-5",
-        name: "Kevin",
-        lastName: "Perez",
-        email: "jua4n@email.com",
-      },
-    ];
+    const { rut } = nookies.get(ctx);
 
-    const appointmentArrayObject = [
-      { nutritionistRut: "12345678-2" },
-      { nutritionistRut: "12345678-6" },
-      { nutritionistRut: "12345678-7" },
-      { nutritionistRut: "12345678-3" },
-    ];
+    const response = await api.get("/api/users/findUsersByRole/nutritionist");
+
+    const nutritionistsData = response.data.map((data: NutritionistProps) => {
+      return {
+        rut: data.rut,
+        name: data.name,
+        lastName: data.lastName,
+        email: data.email,
+      };
+    });
+
+    const responseAppointment = await api.get("/api/appointments");
+
+    const appointmentsData = responseAppointment.data.map(
+      (data: AppointmentProps) => {
+        return {
+          nutritionistRut: data.nutritionistRut,
+        };
+      }
+    );
+
+    const responseClient = await api.get(`/api/users/findUsersByRut/${rut}`);
+
+    let clientData = {};
+
+    responseClient.data.map((client: ClientData) => {
+      clientData = {
+        rut: client.rut,
+        name: client.name,
+        lastName: client.lastName,
+        email: client.email,
+        description: client.description,
+      };
+    });
 
     return {
       props: {
-        nutritionists: nutritionistArrayObject,
-        appointment: appointmentArrayObject,
+        nutritionists: nutritionistsData,
+        appointment: appointmentsData,
+        client: clientData,
       },
     };
   } catch (error) {
@@ -159,6 +159,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: {
         nutritionists: [],
         appointment: [],
+        clientData: {},
       },
     };
   }
