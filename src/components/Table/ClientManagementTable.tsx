@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Divider,
   Flex,
   Modal,
   ModalBody,
@@ -164,11 +165,11 @@ export function ClientManagementTable({
       {handleModal === "profile" ? (
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent bg="gray.800">
+          <ModalContent bg="#302f2f">
             <ModalHeader>
               <Flex align={"center"} gap={3}>
                 <Avatar name={name + " " + lastName} />
-                Perfil de {name}
+                Perfil de {name} {lastName}
               </Flex>
             </ModalHeader>
             <ModalCloseButton />
@@ -180,35 +181,23 @@ export function ClientManagementTable({
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1rem"} fontWeight={"bold"}>
-                    Rut:
-                  </Text>
+                  <Text fontSize={"1rem"}>Rut:</Text>
                   <Text paddingLeft={1}>{rut}</Text>
                 </Flex>
 
+                <Divider borderColor="#3d3d3d" />
+
                 <Flex
                   borderRadius={"5"}
                   flexDir={"column"}
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1rem"} fontWeight={"bold"}>
-                    Nombre:
-                  </Text>
+                  <Text fontSize={"1rem"}>Nombre:</Text>
                   <Text paddingLeft={1}>{name + " " + lastName}</Text>
                 </Flex>
 
-                <Flex
-                  borderRadius={"5"}
-                  flexDir={"column"}
-                  flex="1"
-                  paddingLeft={3}
-                >
-                  <Text fontSize={"1rem"} fontWeight={"bold"}>
-                    Email:
-                  </Text>
-                  <Text paddingLeft={1}>{email}</Text>
-                </Flex>
+                <Divider borderColor="#3d3d3d" />
 
                 <Flex
                   borderRadius={"5"}
@@ -216,23 +205,33 @@ export function ClientManagementTable({
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1rem"} fontWeight={"bold"}>
-                    Descripción
-                  </Text>
+                  <Text fontSize={"1rem"}>Email:</Text>
+                  <Text paddingLeft={1}>{email}</Text>
+                </Flex>
+
+                <Divider borderColor="#3d3d3d" />
+
+                <Flex
+                  borderRadius={"5"}
+                  flexDir={"column"}
+                  flex="1"
+                  paddingLeft={3}
+                >
+                  <Text fontSize={"1rem"}>Descripción</Text>
                   <Text paddingLeft={1}>
                     {!description ? "Sin descripción" : description}
                   </Text>
                 </Flex>
 
+                <Divider borderColor="#3d3d3d" />
+
                 <Flex
                   borderRadius={"5"}
                   flexDir={"column"}
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1rem"} fontWeight={"bold"}>
-                    Fecha de creación
-                  </Text>
+                  <Text fontSize={"1rem"}>Fecha de creación</Text>
                   <Text paddingLeft={1}>
                     {format(new Date(createdAt), "dd-MMM-yyyy")}.
                   </Text>
@@ -254,7 +253,7 @@ export function ClientManagementTable({
       ) : (
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent bg="gray.800">
+          <ModalContent bg="#302f2f">
             <ModalHeader>Editar un cliente</ModalHeader>
             <ModalCloseButton />
             <ModalBody>

@@ -1,4 +1,5 @@
 import {
+  Divider,
   Flex,
   Modal,
   ModalBody,
@@ -123,7 +124,7 @@ export function AppointmentsTable({
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent bg="gray.800">
+        <ModalContent bg="#302f2f">
           <ModalHeader>
             <Flex align={"center"} gap={3}>
               {/* <Avatar name={name + " " + lastName} /> */}
@@ -133,9 +134,7 @@ export function AppointmentsTable({
           <ModalCloseButton />
           <ModalBody gap={2}>
             <Flex borderRadius="5" flexDir={"column"} flex="1" gap={3}>
-              <Text fontSize="1.1rem" fontWeight={"bold"}>
-                Datos de la solicitud
-              </Text>
+              <Text fontSize="1.1rem">Datos de la solicitud</Text>
 
               <Flex
                 borderRadius={"5"}
@@ -143,9 +142,7 @@ export function AppointmentsTable({
                 flex="1"
                 paddingLeft={3}
               >
-                <Text fontSize={"1rem"} fontWeight={"bold"}>
-                  {title}
-                </Text>
+                <Text fontSize={"1rem"}>{title}</Text>
                 <Textarea
                   border={"none"}
                   disabled
@@ -153,6 +150,9 @@ export function AppointmentsTable({
                 ></Textarea>
               </Flex>
             </Flex>
+
+            <Divider borderColor="#3d3d3d" />
+
             <Flex
               borderRadius={"5"}
               marginTop={4}
@@ -160,20 +160,18 @@ export function AppointmentsTable({
               flex="1"
               gap={3}
             >
-              <Text fontSize="1.1rem" fontWeight={"bold"}>
-                Datos del cliente:
-              </Text>
+              <Text fontSize="1.1rem">Datos del cliente:</Text>
               <Flex
                 borderRadius={"5"}
                 flexDir={"column"}
                 flex="1"
                 paddingLeft={3}
               >
-                <Text fontSize={"1rem"} fontWeight={"bold"}>
-                  Rut:
-                </Text>
+                <Text fontSize={"1rem"}>Rut:</Text>
                 <Text paddingLeft={1}>{client.rut}</Text>
               </Flex>
+
+              <Divider borderColor="#3d3d3d" />
 
               <Flex
                 borderRadius={"5"}
@@ -181,25 +179,13 @@ export function AppointmentsTable({
                 flex="1"
                 paddingLeft={3}
               >
-                <Text fontSize={"1rem"} fontWeight={"bold"}>
-                  Nombre:
-                </Text>
+                <Text fontSize={"1rem"}>Nombre:</Text>
                 <Text paddingLeft={1}>
                   {client.name + " " + client.lastName}
                 </Text>
               </Flex>
 
-              <Flex
-                borderRadius={"5"}
-                flexDir={"column"}
-                flex="1"
-                paddingLeft={3}
-              >
-                <Text fontSize={"1rem"} fontWeight={"bold"}>
-                  Email:
-                </Text>
-                <Text paddingLeft={1}>{client.email}</Text>
-              </Flex>
+              <Divider borderColor="#3d3d3d" />
 
               <Flex
                 borderRadius={"5"}
@@ -207,9 +193,19 @@ export function AppointmentsTable({
                 flex="1"
                 paddingLeft={3}
               >
-                <Text fontSize={"1rem"} fontWeight={"bold"}>
-                  Descripción
-                </Text>
+                <Text fontSize={"1rem"}>Email:</Text>
+                <Text paddingLeft={1}>{client.email}</Text>
+              </Flex>
+
+              <Divider borderColor="#3d3d3d" />
+
+              <Flex
+                borderRadius={"5"}
+                flexDir={"column"}
+                flex="1"
+                paddingLeft={3}
+              >
+                <Text fontSize={"1rem"}>Descripción</Text>
                 <Text paddingLeft={1}>{client.description}</Text>
               </Flex>
             </Flex>

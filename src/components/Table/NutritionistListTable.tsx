@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Divider,
   Flex,
   Modal,
   ModalBody,
@@ -135,7 +136,7 @@ export function NutritionistListTable({
       {buttonComponent === "profile" ? (
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent bg="gray.800">
+          <ModalContent bg="#302f2f">
             <ModalHeader>
               <Flex align={"center"} gap={3}>
                 <Avatar name={name + " " + lastName} />
@@ -151,35 +152,23 @@ export function NutritionistListTable({
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1.1rem"} fontWeight={"bold"}>
-                    Rut:
-                  </Text>
+                  <Text fontSize={"1.1rem"}>Rut:</Text>
                   <Text paddingLeft={1}>{rutNutritionist}</Text>
                 </Flex>
 
+                <Divider borderColor="#3d3d3d" />
+
                 <Flex
                   borderRadius={"5"}
                   flexDir={"column"}
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1.1rem"} fontWeight={"bold"}>
-                    Nombre:
-                  </Text>
+                  <Text fontSize={"1.1rem"}>Nombre:</Text>
                   <Text paddingLeft={1}>{name + " " + lastName}</Text>
                 </Flex>
 
-                <Flex
-                  borderRadius={"5"}
-                  flexDir={"column"}
-                  flex="1"
-                  paddingLeft={3}
-                >
-                  <Text fontSize={"1.1rem"} fontWeight={"bold"}>
-                    Email:
-                  </Text>
-                  <Text paddingLeft={1}>{email}</Text>
-                </Flex>
+                <Divider borderColor="#3d3d3d" />
 
                 <Flex
                   borderRadius={"5"}
@@ -187,9 +176,19 @@ export function NutritionistListTable({
                   flex="1"
                   paddingLeft={3}
                 >
-                  <Text fontSize={"1.1rem"} fontWeight={"bold"}>
-                    Descripción
-                  </Text>
+                  <Text fontSize={"1.1rem"}>Email:</Text>
+                  <Text paddingLeft={1}>{email}</Text>
+                </Flex>
+
+                <Divider borderColor="#3d3d3d" />
+
+                <Flex
+                  borderRadius={"5"}
+                  flexDir={"column"}
+                  flex="1"
+                  paddingLeft={3}
+                >
+                  <Text fontSize={"1.1rem"}>Descripción</Text>
                   <Text paddingLeft={1}>Nada.</Text>
                 </Flex>
               </Flex>
@@ -209,7 +208,7 @@ export function NutritionistListTable({
       ) : (
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent bg="gray.800">
+          <ModalContent bg="#302f2f">
             <ModalHeader> Solicitar cita </ModalHeader>
             <ModalCloseButton />
 
