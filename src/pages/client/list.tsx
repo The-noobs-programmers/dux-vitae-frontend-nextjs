@@ -139,7 +139,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       };
     });
 
-    const responseAppointment = await api.get("/api/appointments");
+    const responseAppointment = await api.get(
+      `/api/appointments/findByClientRut/${rut}`
+    );
+
+    console.log("asd", responseAppointment.data);
 
     const appointmentsData = responseAppointment.data.map(
       (data: AppointmentProps) => {
