@@ -65,8 +65,26 @@ export default function NutritionistList({
   }, [appointment]);
 
   return (
-    <Flex flex="1" align="top" justify="center" overflowX="hidden">
-      <TableContainer w="80%" mt="45px">
+    <Flex
+      flex="1"
+      align="top"
+      justify="center"
+      overflowX="hidden"
+      overflowY="auto"
+      __css={{
+        "&::-webkit-scrollbar": {
+          w: "2",
+        },
+        "&::-webkit-scrollbar-track": {
+          w: "6",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          borderRadius: "10",
+          bg: "gray.300",
+        },
+      }}
+    >
+      <TableContainer w="80%" m="45px auto 0">
         <Text mb="8px">Nutricionista:</Text>
         <Input
           onChange={(event) => setSearch(event.target.value)}
@@ -75,34 +93,32 @@ export default function NutritionistList({
           w="30%"
           minW="200px"
         />
-        <Flex overflowX="auto">
-          <Table w="100%" variant="striped" colorScheme="whiteAlpha">
-            <TableCaption>Tabla de nutricionistas</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Rut</Th>
-                <Th>Nombre</Th>
-                <Th>Apellido</Th>
-                <Th></Th>
-                <Th></Th>
-              </Tr>
-            </Thead>
+        <Table w="100%" variant="striped" colorScheme="whiteAlpha">
+          <TableCaption>Tabla de nutricionistas</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Rut</Th>
+              <Th>Nombre</Th>
+              <Th>Apellido</Th>
+              <Th></Th>
+              <Th></Th>
+            </Tr>
+          </Thead>
 
-            <Tbody>
-              {nutritionistFiltered?.map((nutritionists) => (
-                <NutritionistListTable
-                  key={nutritionists.rut}
-                  request={rut.includes(nutritionists.rut)}
-                  rutNutritionist={nutritionists.rut}
-                  name={nutritionists.name}
-                  lastName={nutritionists.lastName}
-                  email={nutritionists.email}
-                  client={client}
-                />
-              ))}
-            </Tbody>
-          </Table>
-        </Flex>
+          <Tbody>
+            {nutritionistFiltered?.map((nutritionists) => (
+              <NutritionistListTable
+                key={nutritionists.rut}
+                request={rut.includes(nutritionists.rut)}
+                rutNutritionist={nutritionists.rut}
+                name={nutritionists.name}
+                lastName={nutritionists.lastName}
+                email={nutritionists.email}
+                client={client}
+              />
+            ))}
+          </Tbody>
+        </Table>
       </TableContainer>
     </Flex>
   );

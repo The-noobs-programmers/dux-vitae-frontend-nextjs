@@ -53,55 +53,60 @@ export default function HandleAppointment({ appointment }: AppointmentProps) {
   const { toastSuccess, toastError } = useToasts();
   const router = useRouter();
 
-  async function rejectRequest(id: string) {
-    //Ruta por si rechaza la solicitud
-    try {
-      const response = await api.delete(`/appointments/${id}`);
-      if (typeof window !== undefined) {
-        toastSuccess({ description: "Solicitud rechazada" });
-      }
-    } catch (err) {
-      toastError({ description: "Error al rechazar solicitud" });
-    }
-  }
-
   return (
-    <Flex flex="1" justify="center" overflowY="auto" mt="45px" mb="10px">
-      <Flex w="80%" flexDir="column">
+    <Flex
+      flex="1"
+      justify="center"
+      mt="45px"
+      mb="10px"
+      overflowX="hidden"
+      overflowY="auto"
+      __css={{
+        "&::-webkit-scrollbar": {
+          w: "2",
+        },
+        "&::-webkit-scrollbar-track": {
+          w: "6",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          borderRadius: "10",
+          bg: "gray.300",
+        },
+      }}
+    >
+      <TableContainer w="80%" margin="0 auto">
         <Flex>
           <Text>Solicitudes</Text>
         </Flex>
 
-        <TableContainer w="100%">
-          <Table size="sm" colorScheme="whiteAlpha">
-            <TableCaption>Tabla de solicitudes </TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Estado</Th>
-                <Th>Rut</Th>
-                <Th>Nombre</Th>
-                <Th>Fecha de solicitud</Th>
-                <Th></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {appointment?.map((appointment) => {
-                return (
-                  <AppointmentsTable
-                    key={appointment.id}
-                    id={appointment.id}
-                    title={appointment.title}
-                    description={appointment.description}
-                    state={appointment.state}
-                    client={appointment.client}
-                    createdAt={appointment.createdAt}
-                  />
-                );
-              })}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      </Flex>
+        <Table size="sm" colorScheme="whiteAlpha">
+          <TableCaption>Tabla de solicitudes </TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Estado</Th>
+              <Th>Rut</Th>
+              <Th>Nombre</Th>
+              <Th>Fecha de solicitud</Th>
+              <Th></Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {appointment?.map((appointment) => {
+              return (
+                <AppointmentsTable
+                  key={appointment.id}
+                  id={appointment.id}
+                  title={appointment.title}
+                  description={appointment.description}
+                  state={appointment.state}
+                  client={appointment.client}
+                  createdAt={appointment.createdAt}
+                />
+              );
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </Flex>
   );
 }

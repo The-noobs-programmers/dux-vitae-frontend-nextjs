@@ -15,7 +15,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { format } from "date-fns";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -27,14 +26,6 @@ import { api } from "../../services/apiClient";
 import { Button } from "../Form/Button";
 import { Input } from "../Form/Input";
 import { InputShowPassword } from "../Form/InputShowPassword";
-
-type ClientData = {
-  rut: string;
-  email: string;
-  name: string;
-  lastName: string;
-  created_at: Date;
-};
 
 type TableContentProps = {
   rut: string;
@@ -232,9 +223,7 @@ export function ClientManagementTable({
                   paddingLeft={3}
                 >
                   <Text fontSize={"1rem"}>Fecha de creación</Text>
-                  <Text paddingLeft={1}>
-                    {format(new Date(createdAt), "dd-MMM-yyyy")}.
-                  </Text>
+                  <Text paddingLeft={1}>{createdAt}.</Text>
                 </Flex>
               </Flex>
             </ModalBody>

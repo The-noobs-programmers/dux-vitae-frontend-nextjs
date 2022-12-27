@@ -19,6 +19,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
@@ -161,8 +162,26 @@ export default function ClientTable({ clients }: Clients) {
   };
 
   return (
-    <Flex flex="1" align="top" justify="center" overflowX="hidden">
-      <TableContainer w="80%" mt="45px">
+    <Flex
+      flex="1"
+      align="top"
+      justify="center"
+      overflowX="hidden"
+      overflowY="auto"
+      __css={{
+        "&::-webkit-scrollbar": {
+          w: "2",
+        },
+        "&::-webkit-scrollbar-track": {
+          w: "6",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          borderRadius: "10",
+          bg: "gray.300",
+        },
+      }}
+    >
+      <TableContainer w="80%" m="45px auto 0">
         <Flex justify="space-between">
           <Flex flexDir="column">
             <Text mb="8px">Cliente:</Text>
@@ -191,34 +210,32 @@ export default function ClientTable({ clients }: Clients) {
           </Flex>
         </Flex>
 
-        <Flex overflowX="auto">
-          <Table w="100%" variant="striped" colorScheme="whiteAlpha">
-            <TableCaption>Tabla de clientes</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Rut</Th>
-                <Th>Nombre</Th>
-                <Th>Apellido</Th>
-                <Th></Th>
-              </Tr>
-            </Thead>
+        <Table w="100%" variant="striped" colorScheme="whiteAlpha">
+          <TableCaption>Tabla de clientes</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Rut</Th>
+              <Th>Nombre</Th>
+              <Th>Apellido</Th>
+              <Th></Th>
+            </Tr>
+          </Thead>
 
-            <Tbody>
-              {clientFiltered?.map((clients) => (
-                <ClientManagementTable
-                  key={clients.rut}
-                  rut={clients.rut}
-                  name={clients.name}
-                  lastName={clients.lastName}
-                  email={clients.email}
-                  createdAt={clients.createdAt}
-                  description={clients.description}
-                  deleteClient={deleteClient}
-                />
-              ))}
-            </Tbody>
-          </Table>
-        </Flex>
+          <Tbody>
+            {clientFiltered?.map((clients) => (
+              <ClientManagementTable
+                key={clients.rut}
+                rut={clients.rut}
+                name={clients.name}
+                lastName={clients.lastName}
+                email={clients.email}
+                createdAt={format(new Date(clients.createdAt), "dd-MMM-yyyy")}
+                description={clients.description}
+                deleteClient={deleteClient}
+              />
+            ))}
+          </Tbody>
+        </Table>
       </TableContainer>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -309,7 +326,6 @@ export default function ClientTable({ clients }: Clients) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const response = await api.get("/api/users/findUsersByRole/client");
-  console.log(response.data);
 
   const clientData: Clients = response.data.map((client: Client) => {
     return {
